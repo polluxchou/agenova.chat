@@ -1,0 +1,18 @@
+{
+  "name": "@agenova/hosted",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "test": "bun test test/",
+    "provision-token": "bun run scripts/provision-token.ts"
+  },
+  "dependencies": {
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "bun-types": "latest",
+    "typescript": "^5.7.0"
+  }
+}
