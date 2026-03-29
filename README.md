@@ -1,18 +1,28 @@
 # Agenova
 
-Agenova is an early-stage experiment around one problem: how should an agent prove who it is when email becomes part of the workflow?
+Agenova is a rough experiment. I am using it to see if an agent can have a clear email identity that is simple enough to actually use.
 
-I did not start with a full product vision. I started with two open-source projects that already pointed in a useful direction: `nit` gave me a shape for mailbox coordination and sync, while `mails` gave me a mailbox-first way of thinking about email handling. Agenova is the rough intersection of those two ideas. It is the place where I tried to connect them into something small, practical, and testable.
+The idea did not come from nowhere. It came from two open-source projects:
 
-The result is not a finished platform. It is closer to a working sketch. Agenova lets an agent claim a mailbox, receive inbound messages, sync them into a local system, and send messages back through a hosted service. That loop is enough to explore identity, ownership, and message flow without pretending the hard parts are already solved.
+- [newtype-ai/nit](https://github.com/newtype-ai/nit)
+- [chekusu/mails](https://github.com/chekusu/mails)
 
-The main thing I am trying to understand is this: if an agent is going to participate in email, how do we give it a durable identity boundary that feels simple enough for a real product? Email is not just transport here. It is the interface. A mailbox is the anchor point, and the hosted service is the place where ownership, routing, and sync can be made explicit.
+`nit` gave me the mailbox claim and sync direction. `mails` gave me the mailbox-first email flow direction. Agenova is just my attempt to connect those two ideas into one small system. It is not a copy of either project, and it is not a finished product. It is a rough try.
 
-This repository is intentionally rough. It is not polished, not generalized, and not presented as a complete answer. It is an early attempt to connect a few ideas that felt like they belonged together.
+What I am trying to build is simple:
+
+- claim a mailbox
+- receive inbound mail
+- sync it into a local app
+- send mail back out through a hosted API
+
+That is the basic loop. I want to see if that loop is enough to give an agent a real, usable identity boundary in email.
+
+This is still early. The code works as a sketch of the workflow, but it is not polished. I am not trying to present a complete platform here. I am trying to test whether the shape makes sense.
 
 ## What Agenova is for
 
-Agenova is for people who want to do something active with a mailbox instead of treating it as a passive inbox.
+Agenova is for people who want to do something active with a mailbox instead of treating it like a dead inbox.
 
 Some example use cases:
 
@@ -22,7 +32,7 @@ Some example use cases:
 - a lightweight inbound mail store that syncs back into a local app
 - an email backend that can be deployed to your own domain and owned by your own system
 
-The core idea is that a mailbox can be claimed, attached to an owner, and used as a stable coordination point. Once that mailbox is claimed, Agenova keeps the public email boundary separate from your application logic. That makes the system easier to reason about, and it also makes the identity question more concrete: the agent is not just “a process,” it is an actor with a mailbox and a traceable flow.
+The main point is that a mailbox can be claimed and tied to an owner. Once that happens, Agenova keeps the public email boundary separate from the app logic. That makes the identity question less vague. The agent is not just a process running somewhere. It has a mailbox, a claim, and a flow.
 
 ## What Agenova does
 
@@ -55,18 +65,14 @@ That gives you a loop that is simple enough to test:
 
 ## Why this exists
 
-A lot of email tooling tends to fall into one of two extremes.
+There are a lot of email tools already. Some are too big. Some are too basic. Agenova is my attempt to sit in the middle.
 
-On one side, you have full mail platforms that are powerful but heavy. On the other side, you have simple SMTP setups that are easy to start with but hard to turn into a real workflow. Agenova is trying to sit between those two extremes.
-
-The goal is not to build a giant provider. The goal is to build a narrow, practical coordination layer for projects that need mailbox ownership, inbound capture, sync back into a local database, and outbound delivery.
-
-This project exists because these two ideas fit together well:
+The project exists because these two ideas fit together:
 
 - `nit` gives a useful shape for mailbox ownership, coordination, and sync
 - `mails` gives a useful shape for handling email in a mailbox-centered flow
 
-Agenova is the rough place where those ideas meet. It is an experiment in making that connection useful for agent identity, not a claim that the problem is already solved.
+Agenova is the rough place where those ideas meet. I found a connection point and started building from there. I am still testing whether it is actually useful.
 
 That is useful for products that need:
 
@@ -76,11 +82,11 @@ That is useful for products that need:
 - outbound email delivery
 - a clear hosted/local boundary
 
-Agenova is also being built with AI and automation use cases in mind. A lot of future systems will probably need a mailbox that acts less like a static inbox and more like a structured interface. Agenova is exploring that direction in a simple, deployable way, with the understanding that the identity and trust model is still being worked through.
+Agenova is also being built with AI and automation use cases in mind. I think a lot of future systems will need a mailbox that is more like an interface than a folder. Agenova is a rough attempt to explore that.
 
 ## Current architecture
 
-The current implementation was developed in phases, with the hosted API and local server working together as a coordinated system.
+The current implementation was developed in phases, with the hosted API and local server working together.
 
 The hosted side includes:
 
@@ -100,7 +106,7 @@ The local side includes:
 - policy and recovery flows
 - support for syncing hosted messages into the local database
 
-The hosted service is intentionally lightweight. It runs on Bun, uses Hono, and stores state in SQLite. That keeps the deployment simple enough for early usage, while leaving room to expand later if the system grows. At this stage, the architecture is more about proving the shape of the workflow than about presenting a fully hardened production stack.
+The hosted service is intentionally lightweight. It runs on Bun, uses Hono, and stores state in SQLite. That is enough for now. The point is to test the shape, not to overbuild.
 
 ## How to use Agenova
 
@@ -123,7 +129,7 @@ In practice, the flow looks like this:
 - your app processes the message
 - if needed, your app replies through the hosted queue
 
-That means the local side can stay focused on product behavior, while the hosted side handles the email boundary and delivery mechanics. In practice, this is the part that makes the project feel useful as an experiment: the agent identity question becomes visible in a real flow instead of staying abstract.
+The local side stays focused on product behavior. The hosted side handles the email boundary and delivery mechanics. That is the part I wanted to make visible.
 
 ## What you need to set up
 
@@ -136,15 +142,15 @@ At minimum, you will usually need:
 - a persistent database for the hosted service
 - a local API token so the local server can talk to the hosted one
 
-The exact setup depends on which provider you choose, but the architecture is meant to stay simple. The hosted side is designed to be deployable on common platforms like Fly.io, Railway, or a VPS. The point here is not to require a large setup; it is to make the boundary visible with the least moving parts possible.
+The exact setup depends on which provider you choose, but the architecture is meant to stay simple. The hosted side is designed to run on common platforms like Fly.io, Railway, or a VPS.
 
 ## Status
 
 Agenova is still early.
 
-The codebase already covers the main claim, sync, inbound, and outbound flows, but it should still be treated as an evolving system rather than a finished platform. It works as a proof of shape, not as a final answer. There is still a lot left to polish, especially around how durable identity should work for agents over time.
+The codebase already covers the main claim, sync, inbound, and outbound flows, but it should still be treated as an evolving system rather than a finished platform. It works as a rough test, not as a final answer. There is still a lot left to polish.
 
-That is intentional. The project is being built in small steps so the system stays understandable and the boundaries stay clear. I would rather have a rough but honest experiment than a polished README that makes the project sound more complete than it is.
+That is intentional. I would rather keep this README honest than make the project sound more complete than it is.
 
 ## Acknowledgements / Credits
 
@@ -153,8 +159,8 @@ Agenova was inspired by and built with reference to:
 - [newtype-ai/nit](https://github.com/newtype-ai/nit)
 - [chekusu/mails](https://github.com/chekusu/mails)
 
-I want to be very clear about the relationship here: Agenova is not a copy of either project, and it is not claiming to be the original source of these ideas. I found a useful connection point between them and built an independent implementation around that connection.
+I want to be clear about the relationship here: Agenova is not a copy of either project, and it is not claiming to be the original source of these ideas. I found a connection point between them and built an independent attempt around that connection.
 
-`nit` shaped the mailbox coordination and sync side of the system. `mails` shaped the mailbox-first email flow. Agenova exists because those two ideas fit together in a way that felt practical for a hosted/local workflow.
+`nit` shaped the mailbox coordination and sync side of the system. `mails` shaped the mailbox-first email flow. Agenova exists because those two ideas fit together in a way that seemed worth trying.
 
-Huge thanks to the original authors for sharing thoughtful open-source work and ideas. Without those projects, Agenova would not have taken this shape.
+Huge thanks to the original authors for sharing their work. Without those projects, Agenova would not exist in this form.
