@@ -1,10 +1,10 @@
 # Agenova
 
-Agenova is an early-stage email coordination system built around a simple idea: email should be something you can actually build on top of.
+Agenova is an early-stage email coordination system, but it is better understood as a combination point than a brand-new invention. I found a practical way to connect two open-source ideas: the mailbox coordination and sync patterns from `nit`, and the email handling / mailbox-first flow from `mails`.
 
 Instead of treating a mailbox as a passive place where messages arrive and wait, Agenova turns it into a small programmable workflow layer. It gives you a way to claim a mailbox, receive inbound messages, sync them into a local application, and send messages back out through a hosted service. The goal is not to replace email providers or become a giant mail platform. The goal is to make email feel like a practical building block for products, internal tools, and AI-assisted workflows.
 
-This project is intentionally still rough. The current focus is on getting the core loop working end to end: claim, receive, sync, send, and deploy. The system is designed to be simple enough to understand, but flexible enough to evolve as the product becomes clearer.
+This project is intentionally still rough. It exists because the core loop became clear enough to connect: claim, receive, sync, send, and deploy. The system is designed to be simple enough to understand, but flexible enough to evolve as the product becomes clearer.
 
 ## What Agenova is for
 
@@ -56,6 +56,13 @@ A lot of email tooling tends to fall into one of two extremes.
 On one side, you have full mail platforms that are powerful but heavy. On the other side, you have simple SMTP setups that are easy to start with but hard to turn into a real workflow. Agenova is trying to sit between those two extremes.
 
 The goal is not to build a giant provider. The goal is to build a narrow, practical coordination layer for projects that need mailbox ownership, inbound capture, sync back into a local database, and outbound delivery.
+
+The project exists because these two ideas fit together well:
+
+- `nit` gives a useful shape for mailbox ownership, coordination, and sync
+- `mails` gives a useful shape for handling email in a mailbox-centered flow
+
+Agenova is the point where those ideas meet in one system.
 
 That is useful for products that need:
 
@@ -142,7 +149,8 @@ Agenova was inspired by and built with reference to:
 - [newtype-ai/nit](https://github.com/newtype-ai/nit)
 - [chekusu/mails](https://github.com/chekusu/mails)
 
-Huge thanks to the original authors for sharing thoughtful open-source work and ideas. Agenova combines the mailbox coordination and sync ideas from these projects into an independent system focused on simple deployment and practical email workflows.
+I want to be very clear about the relationship here: Agenova is not a copy of either project, and it is not claiming to be the original source of these ideas. I found a useful connection point between them and built an independent implementation around that connection.
 
-This repository is not a copy of either upstream project. It is its own implementation, but the direction and thinking were strongly shaped by the work those projects shared publicly.
+`nit` shaped the mailbox coordination and sync side of the system. `mails` shaped the mailbox-first email flow. Agenova exists because those two ideas fit together in a way that felt practical for a hosted/local workflow.
 
+Huge thanks to the original authors for sharing thoughtful open-source work and ideas. Without those projects, Agenova would not have taken this shape.
