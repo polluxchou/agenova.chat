@@ -1,0 +1,29 @@
+app = 'agenova-hosted'
+primary_region = 'nrt'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[mounts]
+  source = 'hosted_data'
+  destination = '/data'
+
+[env]
+  PORT = '3100'
+  AGENOVA_HOSTED_DB_PATH = '/data/hosted.db'
+  AGENOVA_MAILBOX_DOMAIN = 'agenova.chat'
+  # Sensitive vars (RESEND_API_KEY, AGENOVA_WEBHOOK_SECRET, AGENOVA_DEV_TOKEN)
+  # are set via: fly secrets set KEY=value
+  # Never put secret values directly in this file.
+
+[http_service]
+  internal_port = 3100
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpus = 1

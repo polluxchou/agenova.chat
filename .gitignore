@@ -3,3 +3,4 @@ node_modules/
 mails/
 nit/
 .claude/
+packages/server/.agenova/
